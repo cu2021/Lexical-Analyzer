@@ -11,7 +11,7 @@ spch = ['(', ')', '$', '?', '::', ',', ';', '{', '}']
 # Define a regular expression pattern that combines all the elements to match
 combined_pattern = r'("(?:\\"|[^"])*"|\b(?:' + '|'.join(map(re.escape, KEYWORDS)) + r')\b|[()\$?\?\,;\{\}]|\:\:|' \
                                                                                     r'(<=|>=|<>|<|>|==)|[0-9\^\\]+[a-zA-Z][a-zA-z0-9]*|[|\.@`~\'><&\\:]+|' \
-                                                                                    r'((?<![0-9]|\w)[-]?\d+(\.\d+)?(?:[eE][-+]?\d+)?)|(\+|-|\*\*|\*|/|%|=)|\b[a-zA-Z_][a-zA-Z0-9_]*\b)'
+                                                                                    r'((?<![0-9]|\w)[-]?\d+(\.\d+)?)|(\+|-|\*\*|\*|/|%|=)|\b[a-zA-Z_][a-zA-Z0-9_]*\b)'
 
 tokens = []
 
@@ -83,6 +83,7 @@ def replace_with_extra_info(match):
     element = match.group()
     if element in KEYWORDS:
         token = f"<{element.upper()}>"
+        token = f"<{element}>"
         tokens.append(token)
         return token
     elif element in LOP:
