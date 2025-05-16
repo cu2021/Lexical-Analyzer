@@ -37,6 +37,7 @@ Here are some example tokens that the script may generate:
 * `<const, 123.45>`: Constant value "123.45" identified.
 * `<id, variable_name>`: Identifier "variable_name" identified.
 * `<(>`: Special character "(" identified.
+* `<lop, 'GE'>`: Greater than or equal `>=` identified.
 
 ## Sample Usage
 ```
