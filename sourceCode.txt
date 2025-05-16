@@ -1,18 +1,4 @@
-if (x == -10) {
-    int  _y5 = _x ** 2;
-   //   This is a comment
-    y+=y+1;
-    /*
-    this is a comment
-    */
-    print (" gfhdgh = ), int= 5 " );
-}
 int r = 2;
 // compute and print circle area with radius r
-if(r>-10)
+if(r>0)
 print("area = ",3.14*r*r);
-
-float limitedSquare(x) float x; {
-/* returns x-squared, but never more than 100 */
-return (x<=-10.0||x>=10.0)?100::x*x;
-}

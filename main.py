@@ -3,7 +3,7 @@
 import re
 
 # Define the list of keywords, logical operators, and mathematical operators
-KEYWORDS = ["if", "else", "int", "real", "begin", "end", "float"]
+KEYWORDS = ["if", "else", "int", "real", "begin", "end", "float", "return"]
 LOP = {'<=': 'LE', '>=': 'GE', '>': 'GT', '<': 'LT', '==': 'EQ', '<>': 'NE'}
 MOP = {'+': 'ADD', '-': 'SUB', '*': 'MUL', '/': 'DIV', '%': 'MOD', '**': 'POW', '=': 'ASSIGN'}
 spch = ['(', ')', '$', '?', '::', ',', ';', '{', '}']
@@ -12,6 +12,8 @@ spch = ['(', ')', '$', '?', '::', ',', ';', '{', '}']
 combined_pattern = r'("(?:\\"|[^"])*"|\b(?:' + '|'.join(map(re.escape, KEYWORDS)) + r')\b|[()\$?\?\,;\{\}]|\:\:|' \
                                                                                     r'(<=|>=|<>|<|>|==)|[0-9\^\\]+[a-zA-Z][a-zA-z0-9]*|[|\.@`~\'><&\\:]+|' \
                                                                                     r'((?<![0-9]|\w)[-]?\d+(\.\d+)?)|(\+|-|\*\*|\*|/|%|=)|\b[a-zA-Z_][a-zA-Z0-9_]*\b)'
+
+tokens = []
 
 # Define a function to read and remove comments from the input source code
 def read_code(file_path):
@@ -50,7 +52,6 @@ def read_code(file_path):
         raise FileNotFoundError(f"The specified file '{file_path}' does not exist.")
 
 
-tokens = []
 
 
 # Define a function to add extra information to a matched element
@@ -81,7 +82,7 @@ def replace_with_extra_info(match):
     """
     element = match.group()
     if element in KEYWORDS:
-        token = f" <kw, '{element}'> "
+        token = f"<{element}>"
         tokens.append(token)
         return token
     elif element in LOP:
@@ -101,7 +102,7 @@ def replace_with_extra_info(match):
         tokens.append(token)
         return token
     elif re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', element):
-        token = f" <id, '{element}'> "
+        token = f" <id, {element}> "
         tokens.append(token)
         return token
     elif element in spch:
