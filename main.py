@@ -3,7 +3,7 @@
 import re
 
 # Define the list of keywords, logical operators, and mathematical operators
-KEYWORDS = ["if", "else", "int", "real", "begin", "end", "float"]
+KEYWORDS = ["if", "else", "int", "real", "begin", "end", "float", "return"]
 LOP = {'<=': 'LE', '>=': 'GE', '>': 'GT', '<': 'LT', '==': 'EQ', '<>': 'NE'}
 MOP = {'+': 'ADD', '-': 'SUB', '*': 'MUL', '/': 'DIV', '%': 'MOD', '**': 'POW', '=': 'ASSIGN'}
 spch = ['(', ')', '$', '?', '::', ',', ';', '{', '}']
@@ -11,7 +11,9 @@ spch = ['(', ')', '$', '?', '::', ',', ';', '{', '}']
 # Define a regular expression pattern that combines all the elements to match
 combined_pattern = r'("(?:\\"|[^"])*"|\b(?:' + '|'.join(map(re.escape, KEYWORDS)) + r')\b|[()\$?\?\,;\{\}]|\:\:|' \
                                                                                     r'(<=|>=|<>|<|>|==)|[0-9\^\\]+[a-zA-Z][a-zA-z0-9]*|[|\.@`~\'><&\\:]+|' \
-                                                                                    r'((?<![0-9]|\w)[-]?\d+(\.\d+)?)|(\+|-|\*\*|\*|/|%|=)|\b[a-zA-Z_][a-zA-Z0-9_]*\b)'
+                                                                                    r'((?<![0-9]|\w)[-]?\d+(\.\d+)?(?:[eE][-+]?\d+)?)|(\+|-|\*\*|\*|/|%|=)|\b[a-zA-Z_][a-zA-Z0-9_]*\b)'
+
+tokens = []
 
 # Define a function to read and remove comments from the input source code
 def read_code(file_path):
@@ -50,7 +52,6 @@ def read_code(file_path):
         raise FileNotFoundError(f"The specified file '{file_path}' does not exist.")
 
 
-tokens = []
 
 
 # Define a function to add extra information to a matched element
@@ -81,31 +82,31 @@ def replace_with_extra_info(match):
     """
     element = match.group()
     if element in KEYWORDS:
-        token = f" <kw, '{element}'> "
+        token = f"<{element.upper()}>"
         tokens.append(token)
         return token
     elif element in LOP:
-        token = f" <lop, '{element} {LOP[element]}'> "
+        token = f" <lop, '{LOP[element]}'> "
         tokens.append(token)
         return token
     elif element in MOP:
-        token = f" <mop, '{element} {MOP[element]}'> "
+        token = f" <mop, '{MOP[element]}'> "
         tokens.append(token)
         return token
     elif re.match(r'^"[^"]*"$', element):
         token = f" <const, {element}> "
         tokens.append(token)
         return token
-    elif re.match(r'^(-|\+)?\d+(\.\d+)?$', element):
+    elif re.match(r'^(-|\+)?\d+(\.\d+)?(?:[eE][-+]?\d+)?$', element):
         token = f" <const, {element}> "
         tokens.append(token)
         return token
     elif re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', element):
-        token = f" <id, '{element}'> "
+        token = f" <id, {element}> "
         tokens.append(token)
         return token
     elif element in spch:
-        token = f" <spch, '{element}'> "
+        token = f" <{element}> "
         tokens.append(token)
         return token
     else:
@@ -151,7 +152,7 @@ if __name__ == '__main__':
 
     # Printing the streams of lexemes
     for token in tokens:
-        if token == " <spch, '}'> " or token == " <spch, '{'> " or token == " <spch, ';'> ":
+        if token == " <}> " or token == " <{> " or token == " <;> ":
             print(token)
         else:
             print(token, end='')
