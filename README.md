@@ -32,11 +32,11 @@ The script performs the following tasks:
 ## Example
 Here are some example tokens that the script may generate:
 
-* `<kw, 'if'>`: Keyword "if" identified.
-* `<mop, '+ ADD'>`: Mathematical operator "+" identified as addition.
+* `<IF>`: Keyword "if" identified.
+* `<mop, 'ADD'>`: Mathematical operator "+" identified as addition.
 * `<const, 123.45>`: Constant value "123.45" identified.
-* `<id, 'variable_name'>`: Identifier "variable_name" identified.
-* `<spch, '('>`: Special character "(" identified.
+* `<id, variable_name>`: Identifier "variable_name" identified.
+* `<(>`: Special character "(" identified.
 
 ## Sample Usage
 ```
